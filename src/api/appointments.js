@@ -1,7 +1,6 @@
-import api from './axios'
+import http from './axios'
 
+export const getMyAppointments = () => http.get('/appointments/my')
+export const getAppointmentById = (id) => http.get(`/appointments/${id}`)
 export const bookAppointment = ({ appointmentDate, timeSlot }) =>
-  api.post('/appointments', { appointmentDate, timeSlot })
-
-export const getMyAppointments = () => api.get('/appointments/my')
-export const getAppointmentById = (id) => api.get(`/appointments/${id}`)
+  http.post('/appointments', { appointmentDate, timeSlot })

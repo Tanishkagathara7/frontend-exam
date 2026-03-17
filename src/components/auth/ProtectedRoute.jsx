@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
 import useAuthStore from '@/store/authStore'
 
-const roleHome = {
+const homepageByRole = {
   admin: '/admin',
   patient: '/patient',
   receptionist: '/receptionist',
@@ -14,8 +14,9 @@ export function ProtectedRoute({ children, allowedRoles }) {
   if (!token || !user) return <Navigate to="/login" replace />
 
   const role = user.role?.toLowerCase()
+
   if (allowedRoles && !allowedRoles.includes(role)) {
-    return <Navigate to={roleHome[role] || '/login'} replace />
+    return <Navigate to={homepageByRole[role] ?? '/login'} replace />
   }
 
   return children
@@ -23,9 +24,11 @@ export function ProtectedRoute({ children, allowedRoles }) {
 
 export function PublicRoute({ children }) {
   const { user, token } = useAuthStore()
+
   if (token && user) {
     const role = user.role?.toLowerCase()
-    return <Navigate to={roleHome[role] || '/login'} replace />
+    return <Navigate to={homepageByRole[role] ?? '/login'} replace />
   }
+
   return children
 }

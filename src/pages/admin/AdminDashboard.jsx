@@ -1,85 +1,60 @@
 import { useQuery } from '@tanstack/react-query'
-import { getClinic } from '@/api/admin'
+import { getClinicInfo } from '@/api/admin'
 import Card from '@/components/ui/Card'
 import { CardSkeleton } from '@/components/ui/Skeleton'
-import { Building2, Phone, MapPin, Globe } from 'lucide-react'
 
 export default function AdminDashboard() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['clinic'],
-    queryFn: () => getClinic().then((r) => r.data),
+  const { data: clinic, isLoading, error } = useQuery({
+    queryKey: ['clinic-info'],
+    queryFn: () => getClinicInfo().then((r) => r.data),
   })
 
-  if (isLoading) return (
-    <div className="space-y-4">
-      <CardSkeleton />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <CardSkeleton /><CardSkeleton /><CardSkeleton />
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <CardSkeleton />
       </div>
-    </div>
-  )
+    )
+  }
 
-  if (error) return (
-    <Card className="text-center py-12 text-red-500">
-      Failed to load clinic info. Please try again.
-    </Card>
-  )
-
-  const clinic = data || {}
+  if (error) return <p className="text-sm text-red-500">Could not load clinic info.</p>
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage your clinic settings and users</p>
-      </div>
+      <h1 className="text-xl font-semibold text-gray-900">My Clinic</h1>
 
-      <Card className="relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-48 h-48 gradient-primary opacity-5 rounded-full -translate-y-1/2 translate-x-1/2" />
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center flex-shrink-0">
-            <Building2 size={24} className="text-white" />
+      <Card>
+        <h2 className="text-base font-semibold text-gray-900">{clinic.name || '—'}</h2>
+
+        {(clinic.code || clinic.uniqueCode) && (
+          <div className="flex items-center gap-2 mt-3">
+            <span className="text-sm font-medium text-gray-700">Clinic code:</span>
+            <span className="text-sm font-mono bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">
+              {clinic.code || clinic.uniqueCode}
+            </span>
           </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">{clinic.name || 'Clinic Name'}</h2>
-            <p className="text-gray-500 text-sm mt-1">{clinic.description || 'No description'}</p>
-            <div className="flex flex-wrap gap-4 mt-4">
-              {clinic.phone && (
-                <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                  <Phone size={14} className="text-blue-500" />
-                  {clinic.phone}
-                </div>
-              )}
-              {clinic.address && (
-                <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                  <MapPin size={14} className="text-blue-500" />
-                  {clinic.address}
-                </div>
-              )}
-              {clinic.website && (
-                <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                  <Globe size={14} className="text-blue-500" />
-                  {clinic.website}
-                </div>
-              )}
-            </div>
-          </div>
+        )}
+
+        {(clinic.code || clinic.uniqueCode) && (
+          <p className="text-sm text-gray-500 mt-2">
+            Share this code with patients, doctors, and receptionists so they can register and join your clinic.
+          </p>
+        )}
+
+        <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-600">
+          {clinic.phone && <span>{clinic.phone}</span>}
+          {clinic.address && <span>{clinic.address}</span>}
+          {clinic.website && <span>{clinic.website}</span>}
         </div>
-      </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[
-          { label: 'Total Users', value: clinic.userCount ?? '—', color: 'from-blue-500 to-indigo-500' },
-          { label: 'Total Appointments', value: clinic.appointmentCount ?? '—', color: 'from-purple-500 to-pink-500' },
-          { label: 'Queue Entries', value: clinic.queueCount ?? '—', color: 'from-emerald-500 to-teal-500' },
-        ].map(({ label, value, color }) => (
-          <Card key={label} className="relative overflow-hidden">
-            <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-5`} />
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
-          </Card>
-        ))}
-      </div>
+        {(clinic.userCount != null || clinic.appointmentCount != null) && (
+          <p className="text-sm text-gray-600 mt-4">
+            {clinic.userCount != null && `Users: ${clinic.userCount}`}
+            {clinic.userCount != null && clinic.appointmentCount != null && ' · '}
+            {clinic.appointmentCount != null && `Appointments: ${clinic.appointmentCount}`}
+          </p>
+        )}
+      </Card>
     </div>
   )
 }

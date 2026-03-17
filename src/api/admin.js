@@ -1,5 +1,5 @@
-import api from './axios'
+import http from './axios'
 
-export const getClinic = () => api.get('/admin/clinic')
-export const getUsers = () => api.get('/admin/users')
-export const createUser = (data) => api.post('/admin/users', data)
+export const getClinicInfo = () => http.get('/admin/clinic')
+export const getUsers = () => http.get('/admin/users')
+export const createUser = (payload) => http.post('/admin/users', payload)

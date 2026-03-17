@@ -6,8 +6,8 @@ export default function Input({ label, error, className, ...props }) {
       {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
       <input
         className={cn(
-          'w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-400',
-          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all',
+          'w-full px-3 py-2 rounded border border-gray-300 bg-white text-sm text-gray-900 placeholder-gray-400',
+          'focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500',
           error && 'border-red-400 focus:ring-red-400',
           className
         )}

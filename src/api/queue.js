@@ -1,5 +1,5 @@
-import api from './axios'
+import http from './axios'
 
-export const getQueue = (date) => api.get(`/queue?date=${date}`)
-export const updateQueueStatus = (id, status) => api.patch(`/queue/${id}`, { status })
-export const getDoctorQueue = () => api.get('/doctor/queue')
+export const getQueue = (date) => http.get('/queue', { params: { date } })
+export const updateQueueStatus = (queueId, status) => http.patch(`/queue/${queueId}`, { status })
+export const getDoctorQueue = () => http.get('/doctor/queue')

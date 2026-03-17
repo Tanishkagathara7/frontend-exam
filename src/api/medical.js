@@ -1,12 +1,10 @@
-import api from './axios'
+import http from './axios'
 
-// medicines: [{ name, dosage, duration }], notes: string
-export const addPrescription = (appointmentId, data) =>
-  api.post(`/prescriptions/${appointmentId}`, data)
+export const getMyPrescriptions = () => http.get('/prescriptions/my')
+export const getMyReports = () => http.get('/reports/my')
 
-// diagnosis, testRecommended, remarks
-export const addReport = (appointmentId, data) =>
-  api.post(`/reports/${appointmentId}`, data)
+export const addPrescription = (appointmentId, payload) =>
+  http.post(`/prescriptions/${appointmentId}`, payload)
 
-export const getMyPrescriptions = () => api.get('/prescriptions/my')
-export const getMyReports = () => api.get('/reports/my')
+export const addReport = (appointmentId, payload) =>
+  http.post(`/reports/${appointmentId}`, payload)

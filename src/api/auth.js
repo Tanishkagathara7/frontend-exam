@@ -1,3 +1,3 @@
-import api from './axios'
+import http from './axios'
 
-export const login = (credentials) => api.post('/auth/login', credentials)
+export const login = (credentials) => http.post('/auth/login', credentials)
